@@ -40,7 +40,7 @@ int main() {
 
 bool hasAdjacentDigit(int number) {
     std::string number_str = std::to_string(number);
-    for (int i = 0; i < number_str.length() - 1; ++i) {
+    for (unsigned int i = 0; i < number_str.length() - 1; ++i) {
         if (number_str[i] == number_str[i + 1]) {
             return true;
         }
@@ -51,7 +51,7 @@ bool hasAdjacentDigit(int number) {
 bool increasingDigits(int number) {
     std::string number_str = std::to_string(number);
     int digit = number_str[0] - '0';
-    for (int i = 1; i < number_str.length(); ++i) {
+    for (unsigned int i = 1; i < number_str.length(); ++i) {
         if ((number_str[i] - '0') < digit) {
             return false;
         }
@@ -63,7 +63,7 @@ bool increasingDigits(int number) {
 bool exactPairDigits(int number) {
     std::string number_str = std::to_string(number);
     int length = 1;
-    for (int i = 0; i < number_str.length() - 1; ++i) {
+    for (unsigned int i = 0; i < number_str.length() - 1; ++i) {
         if (number_str[i] == number_str[i + 1]) {
             ++length;
         } else {

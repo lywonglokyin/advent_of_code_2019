@@ -140,7 +140,7 @@ int main() {
 
 std::string pad_zero(const std::string& s, int length) {
     std::string temp = s;
-    for (int i = 0; i < length - s.length(); ++i) {
+    for (unsigned int i = 0; i < length - s.length(); ++i) {
         temp = "0" + temp;
     }
     return temp;

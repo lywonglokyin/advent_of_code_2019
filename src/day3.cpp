@@ -46,7 +46,6 @@ int manhattan_distance(const Point& p);
 int calculate_delay(const Point& p, const std::vector<Line>& segments);
 
 int main() {
-    Point icpt = intercept(Line{{1, -1}, {1, 5}}, Line{{1, -5}, {1, 6}});
     std::vector<std::string> inputs = readFile("input/day3");
     std::vector<std::string> pipe_1_commands = split(inputs[0], ",");
     std::vector<std::string> pipe_2_commands = split(inputs[1], ",");
@@ -200,4 +199,5 @@ int calculate_delay(const Point& p, const std::vector<Line>& segments) {
             delay += segment.length();
         }
     }
+    throw -1;
 }
