@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/lywonglokyin/advent_of_code_2019/intcode"
@@ -13,13 +12,13 @@ func main() {
 	filePath := "./day2"
 	lines := utils.ReadFile(filePath)
 	if len(lines) != 1 {
-		log.Fatal("Should only have 1 line...")
+		panic("Should only have 1 line...")
 	}
 
 	commandsText := strings.Split(lines[0], ",")
 	commands, err := utils.SliceAtoi(commandsText)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	commandsPart1 := make([]int64, len(commands))
@@ -62,7 +61,7 @@ func part2(commands []int64) int64 {
 		}
 	}
 	if !found {
-		log.Fatal("No found solution!")
+		panic("No found solution!")
 	}
 	return 100*targetNoun + targetVerb
 }

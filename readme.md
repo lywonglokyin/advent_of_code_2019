@@ -1,1 +1,1 @@
-advent of code 2019 in c++
+advent of code 2019 in go.
