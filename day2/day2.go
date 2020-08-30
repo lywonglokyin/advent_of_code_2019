@@ -33,7 +33,7 @@ func main() {
 func part1(commands []int64) int64 {
 	commands[1] = 12
 	commands[2] = 2
-	interpreter := intcode.NewIntcodeInterpreter(commands)
+	interpreter := intcode.NewIntcodeInterpreter(commands, nil, 0)
 	interpreter.Execute()
 	return interpreter.At(0)
 }
@@ -49,7 +49,7 @@ func part2(commands []int64) int64 {
 			commandsCopy[1] = int64(noun)
 			commandsCopy[2] = int64(verb)
 
-			interpreter := intcode.NewIntcodeInterpreter(commandsCopy)
+			interpreter := intcode.NewIntcodeInterpreter(commandsCopy, nil, 0)
 			interpreter.Execute()
 			output := interpreter.At(0)
 			if output == target {

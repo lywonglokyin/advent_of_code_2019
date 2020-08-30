@@ -20,7 +20,7 @@ func TestIntepreter(t *testing.T) {
 		{[]int64{1, 1, 1, 4, 99, 5, 6, 0, 99}, []int64{30, 1, 1, 4, 2, 5, 6, 0, 99}},
 	}
 	for _, fixture := range fixtures {
-		interpreter := intcode.NewIntcodeInterpreter(fixture.initial)
+		interpreter := intcode.NewIntcodeInterpreter(fixture.initial, nil, 10)
 		interpreter.Execute()
 		reflect.DeepEqual(fixture.expected, interpreter.Intcodes)
 	}

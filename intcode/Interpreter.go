@@ -1,21 +1,33 @@
 package intcode
 
 import (
-	"fmt"
+	"time"
+
+	"github.com/lywonglokyin/advent_of_code_2019/utils"
 )
 
 // A Interpreter handles Intcode
 type Interpreter struct {
 	intcodes []int64
 	pc       uint64 //program counter
+	inputCh  chan int64
+	outputCh chan int64
 }
 
 // NewIntcodeInterpreter is constructor of Interpreter
-func NewIntcodeInterpreter(intcodes []int64) *Interpreter {
-	interpreter := new(Interpreter)
-	interpreter.intcodes = intcodes
-	interpreter.pc = 0
-	return interpreter
+func NewIntcodeInterpreter(intcodes []int64, inputCh chan int64, bufferSize int) *Interpreter {
+	outputCh := make(chan int64, bufferSize)
+	return &Interpreter{
+		intcodes: intcodes,
+		pc:       0,
+		inputCh:  inputCh,
+		outputCh: outputCh,
+	}
+}
+
+// OutputCh is a getter for outputCh.
+func (interpreter *Interpreter) OutputCh() chan int64 {
+	return interpreter.outputCh
 }
 
 // Reset resets the interpreter
@@ -30,6 +42,7 @@ func (interpreter *Interpreter) Execute() {
 		opcode := interpreter.intcodes[pos] % 100
 		if opcode == 99 {
 			interpreter.pc++
+			interpreter.exit()
 			break
 		}
 
@@ -94,8 +107,8 @@ func (interpreter *Interpreter) executeCommand(opcode int64, modeCode int64, arg
 func (interpreter *Interpreter) executeShortCommand(opcode int64, modeCode int64, arg1 int64) {
 	switch opcode {
 	case 3:
-		var i int64
-		_, err := fmt.Scanf("%d", &i)
+		duration, _ := time.ParseDuration("1s")
+		i, err := utils.Timeout(interpreter.inputCh, duration)
 		if err != nil {
 			panic(err)
 		}
@@ -103,7 +116,7 @@ func (interpreter *Interpreter) executeShortCommand(opcode int64, modeCode int64
 	case 4:
 		mode1 := (modeCode % 1000) / 100
 		val1 := interpreter.getValue(arg1, mode1)
-		fmt.Println(val1)
+		interpreter.outputCh <- val1
 	default:
 		panic("Unknown opcode!")
 	}
@@ -139,5 +152,8 @@ func (interpreter *Interpreter) getValue(intcode int64, mode int64) int64 {
 	default:
 		panic("Invalid mode!")
 	}
-	return -1
+}
+
+func (interpreter *Interpreter) exit() {
+	close(interpreter.outputCh)
 }

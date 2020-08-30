@@ -28,27 +28,21 @@ func main() {
 }
 
 func part1(commands []int64) int64 {
-	fakestdin, err := utils.NewFakeStdin("1\n")
-	defer fakestdin.Close()
-	if err != nil {
-		panic(err)
+	inputCh := make(chan int64, 10)
+	inputCh <- 1
+	interpreter := intcode.NewIntcodeInterpreter(commands, inputCh, 10)
+	go interpreter.Execute()
+	var last int64
+	for i := range interpreter.OutputCh() {
+		last = i
 	}
-	interpreter := intcode.NewIntcodeInterpreter(commands)
-	interpreter.Execute()
-	return interpreter.At(0)
+	return last
 }
 
-func part2(commands []int64) string {
-	fakestdin, err := utils.NewFakeStdin("5\n")
-	if err != nil {
-		panic(err)
-	}
-	defer fakestdin.Close()
-	fakestdout, err := utils.NewFakeStdout()
-	if err != nil {
-		panic(err)
-	}
-	interpreter := intcode.NewIntcodeInterpreter(commands)
+func part2(commands []int64) int64 {
+	inputCh := make(chan int64, 10)
+	inputCh <- 5
+	interpreter := intcode.NewIntcodeInterpreter(commands, inputCh, 10)
 	interpreter.Execute()
-	return fakestdout.ReadandClose()
+	return <-interpreter.OutputCh()
 }

@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"time"
 )
 
 // ReadFile read a file line by line, and returns a slice.
@@ -130,4 +131,15 @@ func (fakestdout *Fakestdout) ReadandClose() string {
 func (fakestdout *Fakestdout) Close() {
 	fakestdout.stdoutReader.Close()
 	os.Stdout = fakestdout.origStdout
+}
+
+// Timeout timeouts a channel of int64.
+func Timeout(channel <-chan int64, d time.Duration) (int64, error) {
+	timeCh := time.After(d)
+	select {
+	case d := <-channel:
+		return d, nil
+	case <-timeCh:
+		return -1, errors.New("timeout")
+	}
 }
