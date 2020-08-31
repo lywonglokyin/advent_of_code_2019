@@ -143,3 +143,29 @@ func Timeout(channel <-chan int64, d time.Duration) (int64, error) {
 		return -1, errors.New("timeout")
 	}
 }
+
+func Permutations(numOfItem int) [][]int {
+	integers := make([]int, numOfItem)
+	for i := 0; i < numOfItem; i++ {
+		integers[i] = i
+	}
+	return recursivePerm(numOfItem-1, integers)
+}
+
+func recursivePerm(k int, integers []int) [][]int {
+	if k == 0 {
+		permCollection := make([][]int, 0)
+		perm := make([]int, len(integers))
+		copy(perm, integers)
+		permCollection = append(permCollection, perm)
+		return permCollection
+	}
+
+	permCollection := make([][]int, 0)
+	for i := 0; i <= k; i++ {
+		integers[i], integers[k] = integers[k], integers[i]
+		permCollection = append(permCollection, recursivePerm(k-1, integers)...)
+		integers[i], integers[k] = integers[k], integers[i]
+	}
+	return permCollection
+}
