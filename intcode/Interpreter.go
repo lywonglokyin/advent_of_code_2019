@@ -25,6 +25,14 @@ func NewIntcodeInterpreter(intcodes []int64, inputCh chan int64, bufferSize int)
 	}
 }
 
+func (interpreter *Interpreter) InputCh() chan int64 {
+	return interpreter.inputCh
+}
+
+func (interpreter *Interpreter) SetInputCh(channel chan int64) {
+	interpreter.inputCh = channel
+}
+
 // OutputCh is a getter for outputCh.
 func (interpreter *Interpreter) OutputCh() chan int64 {
 	return interpreter.outputCh
@@ -107,7 +115,7 @@ func (interpreter *Interpreter) executeCommand(opcode int64, modeCode int64, arg
 func (interpreter *Interpreter) executeShortCommand(opcode int64, modeCode int64, arg1 int64) {
 	switch opcode {
 	case 3:
-		duration, _ := time.ParseDuration("1s")
+		duration, _ := time.ParseDuration("5s")
 		i, err := utils.Timeout(interpreter.inputCh, duration)
 		if err != nil {
 			panic(err)
